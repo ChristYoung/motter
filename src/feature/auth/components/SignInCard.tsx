@@ -93,7 +93,10 @@ export const SignInCard: React.FC<SignInCardProps> = (props: SignInCardProps) =>
         </div>
         <p className='text-xs text-muted-foreground'>
           Don&apos;t have an account?{' '}
-          <span className='text-sky-700 hover:underline cursor-pointer' onClick={() => setState('signUp')}>
+          <span
+            className='text-sky-700 hover:underline cursor-pointer'
+            onClick={() => setState('signUp')}
+          >
             Sign up
           </span>
         </p>

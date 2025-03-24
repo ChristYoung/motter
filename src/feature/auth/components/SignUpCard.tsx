@@ -108,13 +108,21 @@ export const SignUpCard: React.FC<SignUpCardProps> = (props: SignUpCardProps) =>
         </form>
         <Separator />
         <div className='flex flex-col gap-y-2.5'>
-          <Button variant='outline' className='w-full' size={'lg'} onClick={() => onProviderSignUp('github')}>
+          <Button
+            variant='outline'
+            className='w-full'
+            size={'lg'}
+            onClick={() => onProviderSignUp('github')}
+          >
             <FaGithub /> Continue with Github
           </Button>
         </div>
         <p className='text-xs text-muted-foreground'>
           Already have an account?{' '}
-          <span className='text-sky-700 hover:underline cursor-pointer' onClick={() => setState('singIn')}>
+          <span
+            className='text-sky-700 hover:underline cursor-pointer'
+            onClick={() => setState('singIn')}
+          >
             Sign in
           </span>
         </p>
