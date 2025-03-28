@@ -18,6 +18,8 @@ export type SheetProps = {
   id: SheetId;
   title: string;
   content: ReactNode;
+  width?: number;
+  height?: number;
   direction?: 'right' | 'bottom';
   description?: string;
   showCloseButton?: boolean;
@@ -82,6 +84,7 @@ export const SheetContextProvider = ({ children }: { children: ReactNode }) => {
       {children}
       {Object.entries(Sheets).map(([id, sheetItem]) => {
         const { isOpen, SheetProps } = sheetItem;
+        const sheetWidth = SheetProps?.width || 500; // Default width if not provided
         const onCloseHandler = () => {
           closeSheet(id as SheetId);
           SheetProps.onClose?.(); // Call the onClose handler if provided
@@ -89,7 +92,10 @@ export const SheetContextProvider = ({ children }: { children: ReactNode }) => {
 
         const SheetComponent = (
           <Sheet key={id} open={isOpen} onOpenChange={onCloseHandler}>
-            <SheetContent side={SheetProps?.direction || 'right'}>
+            <SheetContent
+              side={SheetProps?.direction || 'right'}
+              style={{ width: `${sheetWidth}px` }}
+            >
               <SheetHeader>
                 <SheetTitle>{SheetProps.title}</SheetTitle>
                 {SheetProps?.description && (
