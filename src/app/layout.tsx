@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import { ConvexClientProvider } from '@/components/convex-client-provider';
+import { SheetContextProvider } from '@/context/SheetContext';
 
 import './globals.css';
 
@@ -31,7 +32,9 @@ export default function RootLayout({
     <ConvexAuthNextjsServerProvider>
       <html lang='en'>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <ConvexClientProvider>{children}</ConvexClientProvider>
+          <ConvexClientProvider>
+            <SheetContextProvider>{children}</SheetContextProvider>
+          </ConvexClientProvider>
         </body>
       </html>
     </ConvexAuthNextjsServerProvider>
