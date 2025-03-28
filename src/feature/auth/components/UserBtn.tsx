@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { useCurrentUser } from '../apis';
+import { useCurrentUser } from '../hooks';
 
 export const UserBtn: React.FC = () => {
   const { userInfo, isLoading } = useCurrentUser();
