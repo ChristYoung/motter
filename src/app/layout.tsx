@@ -2,7 +2,7 @@ import { ConvexAuthNextjsServerProvider } from '@convex-dev/auth/nextjs/server';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
-import { ConvexClientProvider } from '@/components/convex-client-provider';
+import { ConvexClientProvider } from '@/context/ConvexClientProvider';
 import { SheetContextProvider } from '@/context/SheetContext';
 
 import './globals.css';
