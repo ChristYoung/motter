@@ -11,10 +11,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 import { useCurrentUser } from '../hooks';
 
-export const UserBtn: React.FC = () => {
+export interface UserBtnProps {
+  hideMenu?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export const UserBtn: React.FC<UserBtnProps> = (props: UserBtnProps) => {
+  const { hideMenu, size } = props;
+  const sizeMap = { sm: 'size-10', md: 'size-16', lg: 'size-20' };
   const { userInfo, isLoading } = useCurrentUser();
   const router = useRouter();
   const { signOut } = useAuthActions();
@@ -25,16 +33,21 @@ export const UserBtn: React.FC = () => {
     return null;
   }
   const avatarFallback = userInfo!.name!.charAt(0).toUpperCase();
+
+  const AvatarContent = (
+    <Avatar className={cn('rounded-md hover:opacity-75 transition', sizeMap[size || 'sm'])}>
+      <AvatarImage className='rounded-md' alt={userInfo.name} src={userInfo.image} />
+      <AvatarFallback className='rounded-md bg-sky-500 text-white'>{avatarFallback}</AvatarFallback>
+    </Avatar>
+  );
+
   return (
     <DropdownMenu modal={false}>
-      <DropdownMenuTrigger className='outline-none relative'>
-        <Avatar className='rounded-md size-10 hover:opacity-75 transition'>
-          <AvatarImage className='rounded-md' alt={userInfo.name} src={userInfo.image} />
-          <AvatarFallback className='rounded-md bg-sky-500 text-white'>
-            {avatarFallback}
-          </AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
+      {hideMenu ? (
+        AvatarContent
+      ) : (
+        <DropdownMenuTrigger className='outline-none relative'>{AvatarContent}</DropdownMenuTrigger>
+      )}
       <DropdownMenuContent align='center' side='right' className='w-60'>
         <DropdownMenuItem
           onClick={() => {
