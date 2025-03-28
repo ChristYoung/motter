@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import { ConvexClientProvider } from '@/components/convex-client-provider';
-import { DrawerContextProvider } from '@/context/DrawerContext';
+import { SheetContextProvider } from '@/context/SheetContext';
 
 import './globals.css';
 
@@ -33,7 +33,7 @@ export default function RootLayout({
       <html lang='en'>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <ConvexClientProvider>
-            <DrawerContextProvider>{children}</DrawerContextProvider>
+            <SheetContextProvider>{children}</SheetContextProvider>
           </ConvexClientProvider>
         </body>
       </html>
