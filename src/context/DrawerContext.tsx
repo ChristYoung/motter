@@ -12,13 +12,22 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '@/components/ui/drawer';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 
 export type DrawerId = string;
 export type DrawerProps = {
   id: DrawerId;
   title: string;
   content: ReactNode;
-  direction?: 'top' | 'bottom';
+  direction?: 'right' | 'bottom';
   description?: string;
   showCloseButton?: boolean;
   showConfirmButton?: boolean;
@@ -86,11 +95,13 @@ export const DrawerContextProvider = ({ children }: { children: ReactNode }) => 
           closeDrawer(id as DrawerId);
           drawerProps.onClose?.(); // Call the onClose handler if provided
         };
-        return (
+
+        // use `Drawer` when the direction is 'bottom', and use `Sheet` when the direction is 'right'
+        const DrawerComponent = (
           <Drawer
             key={id}
             open={isOpen}
-            direction={drawerProps?.direction || 'bottom'}
+            direction={'bottom'}
             onOpenChange={onCloseHandler}
             onAnimationEnd={() => {
               if (!isOpen) {
@@ -136,6 +147,31 @@ export const DrawerContextProvider = ({ children }: { children: ReactNode }) => 
             </DrawerContent>
           </Drawer>
         );
+
+        const SheetComponent = (
+          <Sheet key={id} open={isOpen} onOpenChange={onCloseHandler}>
+            <SheetContent side={'bottom'}>
+              <SheetHeader>
+                <SheetTitle>{drawerProps.title}</SheetTitle>
+                {drawerProps?.description && (
+                  <SheetDescription>{drawerProps.description}</SheetDescription>
+                )}
+              </SheetHeader>
+              <div className='grid gap-4 py-4'>{drawerProps?.content}</div>
+              {drawerProps?.showConfirmButton && (
+                <SheetFooter>
+                  <SheetClose asChild>
+                    <Button type='button' onClick={onCloseHandler}>
+                      {drawerProps?.confirmText || 'Confirm'}
+                    </Button>
+                  </SheetClose>
+                </SheetFooter>
+              )}
+            </SheetContent>
+          </Sheet>
+        );
+
+        return drawerProps?.direction === 'right' ? SheetComponent : DrawerComponent;
       })}
     </DrawerContext.Provider>
   );

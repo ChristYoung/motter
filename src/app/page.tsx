@@ -14,11 +14,25 @@ export default function Home() {
             id: 'welcome',
             title: 'Welcome to Motter',
             description: 'This is a sample drawer component.',
+            direction: 'right',
             content: <div>Drawer content goes here.</div>,
           });
         }}
       >
         Welcome to Motter
+      </Button>
+      <Button
+        onClick={() => {
+          openDrawer({
+            id: 'welcome',
+            title: 'Welcome to Motter',
+            description: 'This is a sample drawer component.',
+            direction: 'bottom',
+            content: <div>Drawer content goes here.</div>,
+          });
+        }}
+      >
+        Welcome to Motter2
       </Button>
       <UserBtn />
     </div>
