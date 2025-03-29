@@ -12,3 +12,11 @@ export const current = query({
     return await ctx.db.get(userId);
   },
 });
+
+export const getUsers = query({
+  args: {},
+  handler: async (ctx) => {
+    const users = await ctx.db.query('users').collect();
+    return users;
+  },
+});
