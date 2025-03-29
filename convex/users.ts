@@ -1,6 +1,7 @@
 import { getAuthUserId } from '@convex-dev/auth/server';
+import { v } from 'convex/values';
 
-import { query } from './_generated/server';
+import { mutation, query } from './_generated/server';
 
 export const current = query({
   args: {},
@@ -27,5 +28,18 @@ export const getUsers = query({
       })
     );
     return usersWithFuncs;
+  },
+});
+
+export const setUserRole = mutation({
+  args: {
+    userId: v.id('users'),
+    code: v.union(v.literal('ADMIN'), v.literal('MEMBER'), v.literal('GUEST')),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert('funcs', {
+      userId: args.userId,
+      code: args.code,
+    });
   },
 });

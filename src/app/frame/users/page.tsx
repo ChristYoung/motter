@@ -3,7 +3,8 @@
 import { ColumnDef } from '@tanstack/react-table';
 
 import { ReusableTable } from '@/components/ReuseableTable';
-import { useUsersApi } from '@/feature/auth/hooks/useUsers';
+import { Button } from '@/components/ui/button';
+import { useSetUserRoleApi, useUsersApi } from '@/feature/auth/hooks/useUsers';
 import { UserItem } from '@/types';
 
 export const columns: ColumnDef<UserItem>[] = [
@@ -27,12 +28,22 @@ export const columns: ColumnDef<UserItem>[] = [
 
 const UserManagement: React.FC = () => {
   const { usersWithFuncs, isLoading } = useUsersApi();
+  const { mutate } = useSetUserRoleApi();
 
   return (
     <div className='__page h-full px-10'>
       {usersWithFuncs && usersWithFuncs?.length > 0 && (
         <ReusableTable columns={columns} data={usersWithFuncs as UserItem[]}></ReusableTable>
       )}
+      <Button
+        onClick={() => {
+          if (usersWithFuncs && usersWithFuncs.length > 0) {
+            mutate(usersWithFuncs[0]._id, 'ADMIN');
+          }
+        }}
+      >
+        Set Role
+      </Button>
     </div>
   );
 };
