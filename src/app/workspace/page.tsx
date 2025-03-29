@@ -1,7 +1,7 @@
 'use client';
 
 const Workspace: React.FC = () => {
-  return <div className='__page'>page component works!</div>;
+  return <div className='__page'>workspace component works!</div>;
 };
 
 export default Workspace;
