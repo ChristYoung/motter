@@ -7,12 +7,13 @@ import { cn } from '@/lib/utils';
 export interface SidebarBtnProps {
   icon: LucideIcon | IconType;
   label: string;
+  iconClass?: string;
   active?: boolean;
   onClick?: () => void;
 }
 
 const SidebarBtn: React.FC<SidebarBtnProps> = (props: SidebarBtnProps) => {
-  const { active, icon: Icon, label, onClick } = props;
+  const { active, icon: Icon, label, onClick, iconClass = '' } = props;
   return (
     <div className='__sidebarBtn flex flex-col items-center justify-center gap-y-0.5 cursor-pointer group'>
       <Button
@@ -20,7 +21,12 @@ const SidebarBtn: React.FC<SidebarBtnProps> = (props: SidebarBtnProps) => {
         onClick={onClick}
         className={cn('size-9 p-2 group-hover:bg-accent/20', active && 'bg-accent/20')}
       >
-        <Icon className='size-5 text-white group-hover:scale-110 transition-all duration-300' />
+        <Icon
+          className={cn(
+            'size-5 text-white group-hover:scale-110 transition-all duration-300',
+            iconClass
+          )}
+        />
       </Button>
       <span className='text-[11px] text-white group-hover:text-accent'>{label}</span>
     </div>

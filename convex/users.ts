@@ -14,6 +14,21 @@ export const current = query({
   },
 });
 
+export const getUserFuncs = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return null;
+    }
+    const funcs = await ctx.db
+      .query('funcs')
+      .withIndex('by_user_id', (q) => q.eq('userId', userId))
+      .unique();
+    return funcs;
+  },
+});
+
 export const getUsers = query({
   args: {},
   handler: async (ctx) => {
