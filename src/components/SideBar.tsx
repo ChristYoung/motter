@@ -1,8 +1,7 @@
 'use client';
 
-import { Home, Loader, MessageSquare, Moon, Sun, UserRoundMinus } from 'lucide-react';
-import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { Home, MessageSquare, Moon, Sun, UserRoundMinus } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { useTheme } from '@/context/ThemeProvider';
 import { UserBtn } from '@/feature/auth/components/UserBtn';
@@ -31,18 +30,7 @@ const Sidebar: React.FC = () => {
         active={pathname.includes('/workspace')}
         onClick={() => onSideBarItemClick('/frame/workspace')}
       />
-      <FeatureFlag
-        conditions={[!!userFuncs, userFuncs?.code === 'ADMIN']}
-        mode='allOf'
-        fallback={
-          <SidebarBtn
-            icon={Loader}
-            label='loading'
-            active={pathname.includes('/users')}
-            iconClass='animate-spin'
-          />
-        }
-      >
+      <FeatureFlag conditions={[!!userFuncs, userFuncs?.code === 'ADMIN']} mode='allOf'>
         <SidebarBtn
           icon={UserRoundMinus}
           label='Users'
