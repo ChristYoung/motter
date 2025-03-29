@@ -19,14 +19,19 @@ export const columns: ColumnDef<UserItem>[] = [
     accessorKey: '_creationTime',
     header: 'Registration Time',
   },
+  {
+    accessorKey: 'funcs',
+    header: 'Role',
+  },
 ];
 
 const UserManagement: React.FC = () => {
-  const { users, isLoading } = useUsersApi();
+  const { usersWithFuncs, isLoading } = useUsersApi();
+
   return (
-    <div className='__page'>
-      {users && users?.length > 0 && (
-        <ReusableTable columns={columns} data={users as UserItem[]}></ReusableTable>
+    <div className='__page h-full px-10'>
+      {usersWithFuncs && usersWithFuncs?.length > 0 && (
+        <ReusableTable columns={columns} data={usersWithFuncs as UserItem[]}></ReusableTable>
       )}
     </div>
   );

@@ -17,6 +17,15 @@ export const getUsers = query({
   args: {},
   handler: async (ctx) => {
     const users = await ctx.db.query('users').collect();
-    return users;
+    const usersWithFuncs = await Promise.all(
+      users.map(async (user) => {
+        const funcs = await ctx.db
+          .query('funcs')
+          .withIndex('by_user_id', (q) => q.eq('userId', user._id))
+          .unique();
+        return { ...user, funcs };
+      })
+    );
+    return usersWithFuncs;
   },
 });
