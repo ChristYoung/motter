@@ -2,11 +2,18 @@ import { authTables } from '@convex-dev/auth/server';
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
 
+export const VFuncCodeType = v.union(
+  v.literal('ADMIN'),
+  v.literal('MEMBER'),
+  v.literal('GUEST'),
+  v.literal('BANNED')
+);
+
 const schema = defineSchema({
   ...authTables,
   funcs: defineTable({
     userId: v.id('users'),
-    code: v.union(v.literal('ADMIN'), v.literal('MEMBER'), v.literal('GUEST')),
+    code: VFuncCodeType,
   }).index('by_user_id', ['userId']),
   words: defineTable({
     userId: v.id('users'),
