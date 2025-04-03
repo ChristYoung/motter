@@ -27,7 +27,7 @@ export const columns: ColumnDef<UserItem>[] = [
 ];
 
 const UserManagement: React.FC = () => {
-  const { usersWithFuncs, isLoading } = useUsersApi();
+  const { usersWithFuncs } = useUsersApi();
   const { mutate } = useSetUserRoleApi();
 
   return (
