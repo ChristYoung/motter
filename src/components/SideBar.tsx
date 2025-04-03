@@ -1,9 +1,9 @@
 'use client';
 
 import { Home, MessageSquare, Moon, Sun, UserRoundMinus } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { usePathname, useRouter } from 'next/navigation';
 
+import { useTheme } from '@/context/ThemeProvider';
 import { UserBtn } from '@/feature/auth/components/UserBtn';
 import { useCurrentUserFuncs } from '@/feature/auth/hooks';
 
@@ -14,7 +14,7 @@ const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { theme, setTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const { userFuncs } = useCurrentUserFuncs();
 
   const onSideBarItemClick = (url: string) => {
@@ -39,11 +39,7 @@ const Sidebar: React.FC = () => {
         />
       </FeatureFlag>
       <SidebarBtn icon={MessageSquare} label='DMs' />
-      <SidebarBtn
-        onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-        icon={theme === 'light' ? Sun : Moon}
-        label='Theme'
-      />
+      <SidebarBtn onClick={toggleTheme} icon={theme === 'light' ? Sun : Moon} label='Theme' />
       <div className='flex flex-col items-center justify-center gap-y-1 mt-auto'>
         <UserBtn />
       </div>
