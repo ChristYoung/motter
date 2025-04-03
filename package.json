@@ -18,9 +18,11 @@
     "@radix-ui/react-dropdown-menu": "^2.1.6",
     "@radix-ui/react-separator": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.2",
+    "@tanstack/react-table": "^8.21.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "convex": "^1.21.0",
+    "date-fns": "^4.1.0",
     "lucide-react": "^0.483.0",
     "next": "14.2.25",
     "next-themes": "^0.4.6",
@@ -32,7 +34,8 @@
     "react-resizable-panels": "^2.1.7",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
-    "vaul": "^1.1.2"
+    "vaul": "1.1.2",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "4.3.0",

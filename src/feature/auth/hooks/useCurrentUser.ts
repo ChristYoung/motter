@@ -7,3 +7,9 @@ export const useCurrentUser = () => {
   const isLoading = userInfo === undefined;
   return { userInfo, isLoading };
 };
+
+export const useCurrentUserFuncs = () => {
+  const userFuncs = useQuery(api.users.getUserFuncs);
+  const isLoading = userFuncs === undefined;
+  return { userFuncs, isLoading };
+};
