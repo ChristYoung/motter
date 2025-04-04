@@ -22,8 +22,8 @@ const schema = defineSchema({
     en_explanation: v.string(),
     cn_explanation: v.string(),
     mispronounced: v.boolean(),
-    total_count: v.int64(),
-    correct_count: v.int64(),
+    total_count: v.number(),
+    correct_count: v.number(),
     type: v.union(v.literal('WORD'), v.literal('PHRASE')),
   }).index('by_user_id', ['userId']),
   explanations: defineTable({
@@ -31,7 +31,7 @@ const schema = defineSchema({
     cn: v.string(),
     en: v.string(),
     isDictation: v.boolean(),
-  }),
+  }).index('by_word_id', ['wordId']),
 });
 
 export default schema;
