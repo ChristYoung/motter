@@ -3,8 +3,6 @@ import { WordItemType } from '@/feature/words/hooks/useWords';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const FREE_DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en'; //  Free dictionary API, supports cross-domain access, but does not return Chinese definitions, //https://dictionaryapi.dev/
 
-const REGEX = new RegExp('/', 'g');
-
 export const fetchWordDetailsFromDictionary = async (
   word: string
 ): Promise<Partial<WordItemType>> => {
@@ -21,11 +19,9 @@ export const fetchWordDetailsFromDictionary = async (
           return `${m?.['partOfSpeech']} ${m?.['definitions'][0]?.definition}`;
         })
         .join('; ');
-      let phonetic: string = wordWrap.phonetic;
-      phonetic = phonetic.includes('/') ? phonetic.replace(REGEX, '') : phonetic;
       return {
         text: word,
-        phonetic,
+        phonetic: wordWrap?.phonetic,
         en_explanation,
         cn_explanation: '',
         mispronounced: false,
