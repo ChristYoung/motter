@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "dev:convex": "npx convex dev",
+    "build:convex": "npx convex deploy --cmd 'npm run build'",
+    "preview": "yarn build && yarn build:convex",
     "build": "next build",
-    "start": "next start",
     "lint": "next lint",
     "format": "prettier --write ."
   },
