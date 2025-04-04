@@ -1,11 +1,11 @@
-import { WordItemType } from '@/feature/words/hooks/useWords';
+import { VWordItemType } from '../../convex/schema';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const FREE_DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en'; //  Free dictionary API, supports cross-domain access, but does not return Chinese definitions, //https://dictionaryapi.dev/
 
 export const fetchWordDetailsFromDictionary = async (
   word: string
-): Promise<Partial<WordItemType>> => {
+): Promise<Partial<VWordItemType>> => {
   const response = await fetch(`${FREE_DICTIONARY_API}/${word}`);
   const data = (await response.json()) as unknown[];
   if (response.ok) {
@@ -28,7 +28,7 @@ export const fetchWordDetailsFromDictionary = async (
         total_count: 0,
         correct_count: 0,
         type: word.includes(' ') ? 'PHRASE' : 'WORD',
-      } as WordItemType;
+      } as VWordItemType;
     }
   }
   return {};

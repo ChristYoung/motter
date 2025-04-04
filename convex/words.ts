@@ -1,7 +1,7 @@
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { v } from 'convex/values';
 
 import { mutation, query } from './_generated/server';
+import { VWordDataSchema } from './schema';
 
 export const getUserWords = query({
   args: {},
@@ -19,16 +19,7 @@ export const getUserWords = query({
 });
 
 export const addWord = mutation({
-  args: {
-    text: v.string(),
-    phonetic: v.string(),
-    en_explanation: v.string(),
-    cn_explanation: v.string(),
-    mispronounced: v.boolean(),
-    total_count: v.number(),
-    correct_count: v.number(),
-    type: v.union(v.literal('WORD'), v.literal('PHRASE')),
-  },
+  args: VWordDataSchema,
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {

@@ -4,8 +4,10 @@ import { useKeyPress } from 'ahooks';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 
 import { Input } from '@/components/ui/input';
-import { useAddWordApi, WordItemType } from '@/feature/words/hooks/useWords';
+import { useAddWordApi } from '@/feature/words/hooks/useWords';
 import { fetchWordDetailsFromDictionary } from '@/util';
+
+import { VWordItemType } from '../../convex/schema';
 
 export interface WordInputItemProps {
   onFinish?: (word: string) => void;
@@ -24,7 +26,7 @@ export const WordInputItem: React.FC<WordInputItemProps> = (props: WordInputItem
   const addWordToDBHandler = useCallback(
     async (word: string) => {
       const wordFromDic = await fetchWordDetailsFromDictionary(word);
-      await mutateAddWord(wordFromDic as WordItemType);
+      await mutateAddWord(wordFromDic as VWordItemType);
     },
     [mutateAddWord]
   );

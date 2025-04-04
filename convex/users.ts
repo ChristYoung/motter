@@ -2,7 +2,7 @@ import { getAuthUserId } from '@convex-dev/auth/server';
 import { v } from 'convex/values';
 
 import { mutation, query } from './_generated/server';
-import { VFuncCodeType } from './schema';
+import { VFuncCodeSchema } from './schema';
 
 export const current = query({
   args: {},
@@ -50,7 +50,7 @@ export const getUsers = query({
 export const setUserRole = mutation({
   args: {
     userId: v.id('users'),
-    code: VFuncCodeType,
+    code: VFuncCodeSchema,
   },
   handler: async (ctx, args) => {
     await ctx.db.insert('funcs', {
