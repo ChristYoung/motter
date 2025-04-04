@@ -1,7 +1,7 @@
 'use client';
 
 import { useKeyPress } from 'ahooks';
-import { useCallback, useLayoutEffect, useRef } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 import { Input } from '@/components/ui/input';
 import { useAddWordApi } from '@/feature/words/hooks/useWords';
@@ -16,6 +16,7 @@ export interface WordInputItemProps {
 
 export const WordInputItem: React.FC<WordInputItemProps> = (props: WordInputItemProps) => {
   const { onFinish, isFocus } = props;
+  const [disabled, setDisabled] = useState<boolean>(false);
   const { mutate: mutateAddWord } = useAddWordApi();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -38,12 +39,13 @@ export const WordInputItem: React.FC<WordInputItemProps> = (props: WordInputItem
       inputRef.current?.blur();
       await addWordToDBHandler(wordValue);
       onFinish?.(wordValue);
+      setDisabled(true);
     }
   });
 
   return (
     <div className='__WordInputItem'>
-      <Input ref={inputRef} placeholder='Enter a word' />
+      <Input disabled={disabled} ref={inputRef} placeholder='Enter a word' />
     </div>
   );
 };
