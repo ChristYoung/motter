@@ -1,4 +1,4 @@
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { useCallback } from 'react';
 
 import { api } from '../../../../convex/_generated/api';
@@ -13,4 +13,10 @@ export const useAddWordApi = () => {
     [mutation]
   );
   return { mutate };
+};
+
+export const useGetWordsApi = () => {
+  const userWords = useQuery(api.words.getUserWords);
+  const isLoading = userWords === undefined;
+  return { userWords, isLoading };
 };

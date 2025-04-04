@@ -21,7 +21,7 @@ export type SheetProps = {
   width?: number;
   height?: number;
   style?: React.CSSProperties;
-  direction?: 'right' | 'bottom';
+  direction?: 'right' | 'bottom' | 'left' | 'top';
   description?: string;
   showCloseButton?: boolean;
   showConfirmButton?: boolean;

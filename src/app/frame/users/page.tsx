@@ -31,7 +31,7 @@ const UserManagement: React.FC = () => {
   const { mutate } = useSetUserRoleApi();
 
   return (
-    <div className='__page h-full px-10'>
+    <div className='h-full px-10'>
       {usersWithFuncs && usersWithFuncs?.length > 0 && (
         <ReusableTable columns={columns} data={usersWithFuncs as UserItem[]}></ReusableTable>
       )}

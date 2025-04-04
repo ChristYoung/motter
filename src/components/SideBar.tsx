@@ -50,11 +50,16 @@ const Sidebar: React.FC = () => {
             title: 'Input New Word',
             content: <WordInput />,
             width: 800,
+            direction: 'left',
             style: { overflowY: 'scroll' },
           })
         }
       ></SidebarBtn>
-      <SidebarBtn icon={MessageSquare} label='Mng' />
+      <SidebarBtn
+        icon={MessageSquare}
+        label='Mng'
+        onClick={() => onSideBarItemClick('/frame/words')}
+      />
       <SidebarBtn onClick={toggleTheme} icon={theme === 'light' ? Sun : Moon} label='Theme' />
       <div className='flex flex-col items-center justify-center gap-y-1 mt-auto'>
         <UserBtn />
