@@ -2,7 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { formatDate } from 'date-fns';
-import { Binoculars, Eye } from 'lucide-react';
+import { Binoculars } from 'lucide-react';
 
 import { ReusableTable } from '@/components/ReuseableTable';
 import { VolumeHorn } from '@/components/Volume';
