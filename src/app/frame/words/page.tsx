@@ -2,9 +2,11 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { formatDate } from 'date-fns';
+import { Binoculars, Eye } from 'lucide-react';
 
 import { ReusableTable } from '@/components/ReuseableTable';
 import { VolumeHorn } from '@/components/Volume';
+import { useSheet } from '@/context/SheetContextProvider';
 import { useGetWordsApi } from '@/feature/words/hooks/useWords';
 
 import { VWordItemType } from '../../../../convex/schema';
@@ -49,7 +51,38 @@ const columns: ColumnDef<VWordItemType>[] = [
       return `${rightRate}%`;
     },
   },
+  {
+    accessorKey: '',
+    header: 'Action',
+    cell: ({ row }) => {
+      return (
+        <div className='flex items-center gap-2'>
+          <OpenWordDetail wordId={row.getValue('id') as string} />
+        </div>
+      );
+    },
+  },
 ];
+
+const OpenWordDetail = (props: { wordId: string }) => {
+  const { openSheet } = useSheet();
+  return (
+    <Binoculars
+      strokeWidth={1}
+      size={18}
+      onClick={() => {
+        openSheet({
+          id: `word-detail_${props.wordId}`,
+          title: 'Word Detail',
+          content: <div>Word Detail</div>,
+          width: 800,
+          style: { overflowY: 'auto' },
+        });
+      }}
+      className='cursor-pointer'
+    />
+  );
+};
 
 const WordsMng: React.FC = () => {
   const { userWords, isLoading } = useGetWordsApi();

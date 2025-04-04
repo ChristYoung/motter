@@ -26,7 +26,8 @@ const Sidebar: React.FC = () => {
 
   return (
     // bg-[#481349]
-    <aside className='__sidebar w-[70px] bg-[#481349] dark:bg-slate-800 h-full flex flex-col gap-y-4 items-center pt-[9px] pb-4 pr-3 pl-3'>
+    // dark:bg-slate-800
+    <aside className='__sidebar w-[70px] bg-[#481349] dark:bg-black h-full flex flex-col gap-y-4 items-center pt-[9px] pb-4 pr-3 pl-3'>
       <SidebarBtn
         icon={Home}
         label='Home'
