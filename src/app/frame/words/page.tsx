@@ -1,9 +1,10 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Volume2 } from 'lucide-react';
+import { formatDate } from 'date-fns';
 
 import { ReusableTable } from '@/components/ReuseableTable';
+import { VolumeHorn } from '@/components/Volume';
 import { useGetWordsApi } from '@/feature/words/hooks/useWords';
 
 import { VWordItemType } from '../../../../convex/schema';
@@ -21,7 +22,11 @@ const columns: ColumnDef<VWordItemType>[] = [
       return (
         <div className='flex items-center gap-2'>
           {phonetic}
-          <Volume2 strokeWidth={1} className='cursor-pointer' />
+          <VolumeHorn
+            wordText={row.getValue('text') as string}
+            preloadSrc={false}
+            autoPlay={false}
+          />
         </div>
       );
     },
@@ -29,6 +34,10 @@ const columns: ColumnDef<VWordItemType>[] = [
   {
     accessorKey: '_creationTime',
     header: 'Creation Time',
+    cell: ({ row }) => {
+      const creationTime = row.getValue('_creationTime') as string;
+      return formatDate(new Date(creationTime), 'yyyy/MM/dd HH:mm:ss');
+    },
   },
   {
     accessorKey: '',
