@@ -2,22 +2,26 @@
 
 import { useState } from 'react';
 
-import { Input } from '@/components/ui/input';
+import { WordInputItem } from './WordInputItem';
 
 export const WordInput: React.FC = () => {
-  const [wordQueue, setWordQueue] = useState<string[]>(['']);
+  const [words, setWords] = useState<Array<{ isFocus: boolean }>>([{ isFocus: true }]);
   return (
     <div className='__WordInput'>
-      {wordQueue.map((word, index) => (
-        <Input
-          key={index}
-          value={word}
-          onChange={(e) => {
-            const newWordQueue = [...wordQueue];
-            newWordQueue[index] = e.target.value;
-            setWordQueue(newWordQueue);
-          }}
-        />
+      {words.map((w, index) => (
+        <div key={index} className='mb-5'>
+          <WordInputItem
+            isFocus={w.isFocus}
+            onFinish={() => {
+              setWords((prev) => {
+                const newWords = [...prev];
+                newWords[index] = { isFocus: false };
+                newWords.push({ isFocus: true });
+                return newWords;
+              });
+            }}
+          />
+        </div>
       ))}
     </div>
   );

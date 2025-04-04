@@ -20,6 +20,7 @@ export type SheetProps = {
   content: ReactNode;
   width?: number;
   height?: number;
+  style?: React.CSSProperties;
   direction?: 'right' | 'bottom';
   description?: string;
   showCloseButton?: boolean;
@@ -31,7 +32,7 @@ export type SheetProps = {
   onConfirm?: () => void;
 };
 
-export type SheetContentState = Record<SheetId, { isOpen: boolean; SheetProps: SheetProps }>;
+export type SheetContentState = Record<SheetId, { isOpen: boolean; sheetProps: SheetProps }>;
 export type SheetContentAction =
   | {
       type: 'OPEN';
@@ -53,7 +54,7 @@ export const SheetContextReducer = (
     case 'OPEN':
       return {
         ...state,
-        [action.payload.id]: { isOpen: true, SheetProps: action.payload },
+        [action.payload.id]: { isOpen: true, sheetProps: action.payload },
       };
     case 'CLOSE': {
       return { ...state, [action.payload.id]: { ...state[action.payload.id], isOpen: false } };
@@ -71,8 +72,8 @@ export const SheetContextReducer = (
 export const SheetContextProvider = ({ children }: { children: ReactNode }) => {
   const [Sheets, dispatch] = useReducer(SheetContextReducer, {});
 
-  const openSheet = (SheetProps: SheetProps) => {
-    dispatch({ type: 'OPEN', payload: SheetProps });
+  const openSheet = (sheetProps: SheetProps) => {
+    dispatch({ type: 'OPEN', payload: sheetProps });
   };
 
   const closeSheet = (SheetId: SheetId) => {
@@ -83,31 +84,31 @@ export const SheetContextProvider = ({ children }: { children: ReactNode }) => {
     <SheetContext.Provider value={{ openSheet, closeSheet }}>
       {children}
       {Object.entries(Sheets).map(([id, sheetItem]) => {
-        const { isOpen, SheetProps } = sheetItem;
-        const sheetWidth = SheetProps?.width || 500; // Default width if not provided
+        const { isOpen, sheetProps } = sheetItem;
+        const sheetWidth = sheetProps?.width || 500; // Default width if not provided
         const onCloseHandler = () => {
           closeSheet(id as SheetId);
-          SheetProps.onClose?.(); // Call the onClose handler if provided
+          sheetProps.onClose?.(); // Call the onClose handler if provided
         };
 
         const SheetComponent = (
           <Sheet key={id} open={isOpen} onOpenChange={onCloseHandler}>
             <SheetContent
-              side={SheetProps?.direction || 'right'}
-              style={{ width: `${sheetWidth}px` }}
+              side={sheetProps?.direction || 'right'}
+              style={{ width: `${sheetWidth}px`, ...sheetProps?.style }}
             >
               <SheetHeader>
-                <SheetTitle>{SheetProps.title}</SheetTitle>
-                {SheetProps?.description && (
-                  <SheetDescription>{SheetProps.description}</SheetDescription>
+                <SheetTitle>{sheetProps.title}</SheetTitle>
+                {sheetProps?.description && (
+                  <SheetDescription>{sheetProps.description}</SheetDescription>
                 )}
               </SheetHeader>
-              <div className='grid gap-4 py-4'>{SheetProps?.content}</div>
-              {SheetProps?.showConfirmButton && (
+              <div className='grid gap-4 py-4'>{sheetProps?.content}</div>
+              {sheetProps?.showConfirmButton && (
                 <SheetFooter>
                   <SheetClose asChild>
                     <Button type='button' onClick={onCloseHandler}>
-                      {SheetProps?.confirmText || 'Confirm'}
+                      {sheetProps?.confirmText || 'Confirm'}
                     </Button>
                   </SheetClose>
                 </SheetFooter>

@@ -50,6 +50,7 @@ const Sidebar: React.FC = () => {
             title: 'Input New Word',
             content: <WordInput />,
             width: 800,
+            style: { overflowY: 'scroll' },
           })
         }
       ></SidebarBtn>
