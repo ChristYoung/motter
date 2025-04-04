@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useSetUserRoleApi, useUsersApi } from '@/feature/auth/hooks/useUsers';
 import { UserItem } from '@/types';
 
-export const columns: ColumnDef<UserItem>[] = [
+const columns: ColumnDef<UserItem>[] = [
   {
     accessorKey: 'name',
     header: 'User Name',
