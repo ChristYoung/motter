@@ -22,7 +22,9 @@ const SidebarBtn: React.FC<SidebarBtnProps> = (props: SidebarBtnProps) => {
       >
         <Icon className='size-5 text-white group-hover:scale-110 transition-all duration-300' />
       </Button>
-      <span className='text-[11px] text-white group-hover:text-accent'>{label}</span>
+      <span className='text-[11px] text-white group-hover:text-accent dark:group-hover:text-accent-foreground'>
+        {label}
+      </span>
     </div>
   );
 };
