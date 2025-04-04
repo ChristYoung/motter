@@ -1,17 +1,20 @@
 'use client';
 
-import { Home, MessageSquare, Moon, Sun, UserRoundMinus } from 'lucide-react';
+import { Home, MessageSquare, Moon, Sun, UserRoundMinus, ListCheck } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 
+import { useSheet } from '@/context/SheetContextProvider';
 import { useTheme } from '@/context/ThemeProvider';
 import { UserBtn } from '@/feature/auth/components/UserBtn';
 import { useCurrentUserFuncs } from '@/feature/auth/hooks';
 
 import { FeatureFlag } from './FeatureFlag';
 import SidebarBtn from './SideBarBtn';
+import { WordInput } from './WordInput';
 
 const Sidebar: React.FC = () => {
   const pathname = usePathname();
+  const { openSheet } = useSheet();
   const router = useRouter();
 
   const { theme, toggleTheme } = useTheme();
@@ -38,7 +41,19 @@ const Sidebar: React.FC = () => {
           onClick={() => onSideBarItemClick('/frame/users')}
         />
       </FeatureFlag>
-      <SidebarBtn icon={MessageSquare} label='DMs' />
+      <SidebarBtn
+        icon={ListCheck}
+        label='Input'
+        onClick={() =>
+          openSheet({
+            id: 'word-input',
+            title: 'Input New Word',
+            content: <WordInput />,
+            width: 800,
+          })
+        }
+      ></SidebarBtn>
+      <SidebarBtn icon={MessageSquare} label='Mng' />
       <SidebarBtn onClick={toggleTheme} icon={theme === 'light' ? Sun : Moon} label='Theme' />
       <div className='flex flex-col items-center justify-center gap-y-1 mt-auto'>
         <UserBtn />
