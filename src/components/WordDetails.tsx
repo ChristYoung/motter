@@ -6,6 +6,7 @@ import {
   useAddExampleApi,
   useDeleteExampleApi,
   useQueryExamplesByWordIdApi,
+  useUpdateExampleApi,
 } from '@/feature/words/hooks/useExamples';
 import { useGetWordByIdApi } from '@/feature/words/hooks/useWords';
 import { safeJSONParse } from '@/util';
@@ -26,6 +27,7 @@ export const WordDetails: React.FC<WordDetailsProps> = (props: WordDetailsProps)
   const { exampleList, isLoading: isLoadingExamples } = useQueryExamplesByWordIdApi(wordId);
   const { deleteExampleMutate } = useDeleteExampleApi();
   const { addExampleMutate } = useAddExampleApi();
+  const { updateExampleMutate } = useUpdateExampleApi();
   const inputRefCn = useRef<HTMLTextAreaElement>(null);
   const inputRefEn = useRef<HTMLTextAreaElement>(null);
 
@@ -79,7 +81,14 @@ export const WordDetails: React.FC<WordDetailsProps> = (props: WordDetailsProps)
                   <Button variant='outline' size='icon' className='size-8 rounded-full'>
                     <Volume2 className='size-2' />
                   </Button>
-                  <Button variant='outline' size='icon' className='size-8 rounded-full'>
+                  <Button
+                    variant='outline'
+                    size='icon'
+                    className='size-8 rounded-full'
+                    onClick={() => {
+                      updateExampleMutate(example._id, { isDictation: !example.isDictation });
+                    }}
+                  >
                     <Instagram className='size-2' />
                   </Button>
                   <Button
