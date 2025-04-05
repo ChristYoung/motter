@@ -12,7 +12,7 @@ export const useQueryExamplesByWordIdApi = (wordId: Id<'words'>) => {
 
 export const useAddExampleApi = () => {
   const addExample = useMutation(api.examples.addExampleByWordId);
-  const addExampleCallback = useCallback(
+  const addExampleMutate = useCallback(
     async (
       wordId: Id<'words'>,
       example: {
@@ -25,23 +25,23 @@ export const useAddExampleApi = () => {
     },
     [addExample]
   );
-  return addExampleCallback;
+  return { addExampleMutate };
 };
 
 export const useDeleteExampleApi = () => {
   const deleteExample = useMutation(api.examples.deleteExampleById);
-  const deleteExampleCallback = useCallback(
+  const deleteExampleMutate = useCallback(
     async (exampleId: Id<'examples'>) => {
       await deleteExample({ exampleId });
     },
     [deleteExample]
   );
-  return deleteExampleCallback;
+  return { deleteExampleMutate };
 };
 
 export const useUpdateExampleApi = () => {
   const updateExample = useMutation(api.examples.updateExampleById);
-  const updateExampleCallback = useCallback(
+  const updateExampleMutate = useCallback(
     async (
       exampleId: Id<'examples'>,
       data: {
@@ -54,5 +54,5 @@ export const useUpdateExampleApi = () => {
     },
     [updateExample]
   );
-  return updateExampleCallback;
+  return { updateExampleMutate };
 };

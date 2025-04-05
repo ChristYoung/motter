@@ -1,7 +1,12 @@
 import { Instagram, Trash2, Volume2 } from 'lucide-react';
+import { useRef } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import {
+  useAddExampleApi,
+  useDeleteExampleApi,
+  useQueryExamplesByWordIdApi,
+} from '@/feature/words/hooks/useExamples';
 import { useGetWordByIdApi } from '@/feature/words/hooks/useWords';
 import { safeJSONParse } from '@/util';
 
@@ -9,6 +14,7 @@ import { Id } from '../../convex/_generated/dataModel';
 import { FullSkeleton } from './FullSkeleton';
 import { SynonymTags } from './SynonymTags';
 import { VolumeHorn } from './Volume';
+import { Textarea } from './ui/textarea';
 
 export interface WordDetailsProps {
   wordId: Id<'words'>;
@@ -17,6 +23,11 @@ export interface WordDetailsProps {
 export const WordDetails: React.FC<WordDetailsProps> = (props: WordDetailsProps) => {
   const { wordId } = props;
   const { wordDetail, isLoading } = useGetWordByIdApi(wordId);
+  const { exampleList, isLoading: isLoadingExamples } = useQueryExamplesByWordIdApi(wordId);
+  const { deleteExampleMutate } = useDeleteExampleApi();
+  const { addExampleMutate } = useAddExampleApi();
+  const inputRefCn = useRef<HTMLTextAreaElement>(null);
+  const inputRefEn = useRef<HTMLTextAreaElement>(null);
 
   if (isLoading) {
     return <FullSkeleton />;
@@ -35,7 +46,7 @@ export const WordDetails: React.FC<WordDetailsProps> = (props: WordDetailsProps)
 
       {/* Similar words section */}
       <div className='mb-8'>
-        <h2 className='text-2xl font-bold text-foreground mb-4'>Similar</h2>
+        <h2 className='text-2xl font-bold text-foreground mb-4'>Synonyms</h2>
         <div className='flex flex-wrap gap-2'>
           <SynonymTags tags={safeJSONParse(wordDetail?.synonym, [])} />
         </div>
@@ -51,42 +62,58 @@ export const WordDetails: React.FC<WordDetailsProps> = (props: WordDetailsProps)
       </div>
 
       {/* Examples section */}
-      <div className='mb-8'>
+      <div className='mb-4'>
         <h2 className='text-2xl font-bold text-foreground mb-4'>Examples</h2>
         <div className='space-y-4'>
-          <p className='text-gray-800 dark:text-foreground'>
-            It has an orange flavour and smooth <span className='text-red-500'>texture</span>.
-          </p>
-          <p className='text-gray-800 dark:text-foreground'>它有一种桔子的味道，质地光滑。</p>
-
-          <div className='flex gap-2 mt-2'>
-            <Button variant='outline' size='icon' className='size-10 rounded-full'>
-              <Volume2 className='h-4 w-4' />
-            </Button>
-            <Button variant='outline' size='icon' className='size-10 rounded-full'>
-              <Instagram className='h-4 w-4' />
-            </Button>
-            <Button variant='outline' size='icon' className='size-10 rounded-full'>
-              <Trash2 className='h-4 w-4' />
-            </Button>
-          </div>
+          {isLoadingExamples ? (
+            <FullSkeleton />
+          ) : (
+            exampleList.map((example) => (
+              <div
+                key={example._id}
+                className='flex flex-col gap-2 border-b border-blue-100 dark:border-blue-200 pb-4'
+              >
+                <p className='text-gray-800 dark:text-foreground'>{example.en}</p>
+                <p className='text-gray-800 dark:text-foreground'>{example.cn}</p>
+                <div className='flex gap-2 mt-2'>
+                  <Button variant='outline' size='icon' className='size-8 rounded-full'>
+                    <Volume2 className='size-2' />
+                  </Button>
+                  <Button variant='outline' size='icon' className='size-8 rounded-full'>
+                    <Instagram className='size-2' />
+                  </Button>
+                  <Button
+                    variant='outline'
+                    size='icon'
+                    className='size-8 rounded-full'
+                    onClick={() => deleteExampleMutate(example._id)}
+                  >
+                    <Trash2 className='size-2' />
+                  </Button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+        <div className='space-y-3 my-3'>
+          <Textarea ref={inputRefEn} placeholder='Type your English example' />
+          <Textarea ref={inputRefCn} placeholder='Type your Chinese example' />
         </div>
       </div>
 
-      {/* Input fields */}
-      <div className='space-y-4 mb-8'>
-        <Input
-          placeholder='input your English example'
-          className='border-gray-300 focus:border-gray-400 focus:ring-0'
-        />
-        <Input
-          placeholder='input your Chinese example'
-          className='border-gray-300 focus:border-gray-400 focus:ring-0'
-        />
-      </div>
-
       {/* Add example button */}
-      <Button variant='outline' className='border-gray-300 text-gray-500 dark:text-foreground'>
+      <Button
+        variant='outline'
+        onClick={() => {
+          const exampleCn = inputRefCn.current?.value;
+          const exampleEn = inputRefEn.current?.value;
+          if (exampleCn && exampleEn) {
+            addExampleMutate(wordId, { cn: exampleCn, en: exampleEn, isDictation: false });
+            inputRefCn.current.value = '';
+            inputRefEn.current.value = '';
+          }
+        }}
+      >
         Add an example
       </Button>
     </div>

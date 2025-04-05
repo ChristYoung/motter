@@ -4,6 +4,9 @@ import { VWordItemType } from '../../convex/schema';
 export const FREE_DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en'; //  Free dictionary API, supports cross-domain access, but does not return Chinese definitions, //https://dictionaryapi.dev/
 
 export function safeJSONParse<T>(jsonString: string, defaultValue = null): T {
+  if (!jsonString) {
+    return defaultValue;
+  }
   try {
     return JSON.parse(jsonString) as T;
   } catch (e) {
