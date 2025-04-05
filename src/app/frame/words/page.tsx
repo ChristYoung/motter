@@ -2,13 +2,13 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { formatDate } from 'date-fns';
-import { Binoculars, Speech, Trash2 } from 'lucide-react';
+import { Binoculars, Trash2 } from 'lucide-react';
 
 import { ReusableTable } from '@/components/ReuseableTable';
 import { VolumeHorn } from '@/components/Volume';
 import { WordDetails } from '@/components/WordDetails';
 import { useSheet } from '@/context/SheetContextProvider';
-import { useGetWordsApi } from '@/feature/words/hooks/useWords';
+import { useDeleteWordApi, useGetWordsApi } from '@/feature/words/hooks/useWords';
 
 import { Id } from '../../../../convex/_generated/dataModel';
 import { VWordItemType } from '../../../../convex/schema';
@@ -67,13 +67,13 @@ const columns: ColumnDef<VWordItemType>[] = [
 
 const OpenWordDetail = (props: { wordId: Id<'words'> }) => {
   const { openSheet } = useSheet();
+  const { mutate: mutateDeleteWordById } = useDeleteWordApi();
   return (
     <div className='flex items-center gap-2'>
       <Binoculars
         strokeWidth={1}
         size={14}
         onClick={() => {
-          console.log('props?.wordId', props?.wordId);
           openSheet({
             id: `word-detail_${props.wordId}`,
             title: 'Word Detail',
@@ -84,8 +84,12 @@ const OpenWordDetail = (props: { wordId: Id<'words'> }) => {
         }}
         className='cursor-pointer'
       />
-      <Speech strokeWidth={1.2} size={14} className='cursor-pointer' />
-      <Trash2 strokeWidth={1.2} size={14} className='cursor-pointer' />
+      <Trash2
+        strokeWidth={1.2}
+        size={14}
+        onClick={() => mutateDeleteWordById(props.wordId)}
+        className='cursor-pointer'
+      />
     </div>
   );
 };
