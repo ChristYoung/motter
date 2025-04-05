@@ -1,36 +1,35 @@
-import { Volume2, Instagram, Trash2, X, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { Instagram, Trash2, Volume2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useGetWordByIdApi } from '@/feature/words/hooks/useWords';
+import { safeJSONParse } from '@/util';
 
+import { Id } from '../../convex/_generated/dataModel';
+import { FullSkeleton } from './FullSkeleton';
 import { SynonymTags } from './SynonymTags';
+import { VolumeHorn } from './Volume';
 
 export interface WordDetailsProps {
   wordId: Id<'words'>;
 }
 
 export const WordDetails: React.FC<WordDetailsProps> = (props: WordDetailsProps) => {
-  const [similarWords, setSimilarWords] = useState([
-    'essence',
-    'configuration',
-    'mechanics',
-    'framework',
-    'substance',
-    'truth',
-    'principle',
-  ]);
+  const { wordId } = props;
+  const { wordDetail, isLoading } = useGetWordByIdApi(wordId);
+
+  if (isLoading) {
+    return <FullSkeleton />;
+  }
 
   return (
     <div className='w-full p-6'>
       {/* Word and pronunciation */}
       <div className='mb-8'>
-        <h1 className='text-5xl font-bold text-foreground mb-2'>texture</h1>
+        <h1 className='text-5xl font-bold text-foreground mb-2'>{wordDetail?.text}</h1>
         <div className='flex items-center gap-2'>
-          <span className='text-foreground'>/tekstʃər/</span>
-          <Button variant='ghost' size='icon' className='h-8 w-8 rounded-full'>
-            <Volume2 className='h-4 w-4' />
-          </Button>
+          {wordDetail?.phonetic && <span className='text-foreground'>{wordDetail?.phonetic}</span>}
+          <VolumeHorn wordText={wordDetail?.text} preloadSrc />
         </div>
       </div>
 
@@ -38,7 +37,7 @@ export const WordDetails: React.FC<WordDetailsProps> = (props: WordDetailsProps)
       <div className='mb-8'>
         <h2 className='text-2xl font-bold text-foreground mb-4'>Similar</h2>
         <div className='flex flex-wrap gap-2'>
-          <SynonymTags tags={similarWords} />
+          <SynonymTags tags={safeJSONParse(wordDetail?.synonym, [])} />
         </div>
       </div>
 
@@ -46,8 +45,8 @@ export const WordDetails: React.FC<WordDetailsProps> = (props: WordDetailsProps)
       <div className='mb-8'>
         <h2 className='text-2xl font-bold text-foreground mb-4'>Definition</h2>
         <div className='space-y-4'>
-          <p className='text-foreground'>n. 质地，纹理；口感；(音乐或文学的) 谐和统一感, 神韵</p>
-          <p className='text-foreground'>the feel of a surface or a fabric</p>
+          <p className='text-foreground'>{wordDetail?.cn_explanation}</p>
+          <p className='text-foreground'>{wordDetail?.en_explanation}</p>
         </div>
       </div>
 

@@ -30,6 +30,7 @@ export const SynonymTags: React.FC<SynonymTagsProps> = memo((props: SynonymTagsP
 
   const onAddTagHandler = useCallback(
     (addTag: string) => {
+      if (!addTag || synonyms.includes(addTag)) return;
       const newTags = [...synonyms, addTag];
       setSynonyms(newTags);
       onTagsChange(newTags);
@@ -70,17 +71,22 @@ export const SynonymTags: React.FC<SynonymTagsProps> = memo((props: SynonymTagsP
             </div>
           );
         })}
-      {!freezed && (
+      {!freezed && !inputVisible && (
         <Button
           variant='outline'
           className='flex items-center gap-1 px-3 py-1.5 h-auto border-dashed'
-          onClick={() => setInputVisible(true)}
+          onClick={() => {
+            setInputVisible(true);
+            setTimeout(() => {
+              inputRef.current?.focus();
+            }, 50);
+          }}
         >
           <Plus className='size-3' />
           <span>add new</span>
         </Button>
       )}
-      {inputVisible && (
+      {!freezed && inputVisible && (
         <Input
           ref={inputRef}
           className='border-gray-300 focus:border-gray-400 focus:ring-0 w-[75px]'
