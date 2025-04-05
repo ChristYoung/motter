@@ -3,6 +3,18 @@ import { VWordItemType } from '../../convex/schema';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const FREE_DICTIONARY_API = 'https://api.dictionaryapi.dev/api/v2/entries/en'; //  Free dictionary API, supports cross-domain access, but does not return Chinese definitions, //https://dictionaryapi.dev/
 
+export function safeJSONParse<T>(jsonString: string, defaultValue = null): T {
+  if (!jsonString) {
+    return defaultValue;
+  }
+  try {
+    return JSON.parse(jsonString) as T;
+  } catch (e) {
+    console.error('error format json', e);
+    return defaultValue;
+  }
+}
+
 export const fetchWordDetailsFromDictionary = async (
   word: string
 ): Promise<Partial<VWordItemType>> => {

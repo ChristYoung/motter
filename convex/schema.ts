@@ -15,10 +15,21 @@ export const VWordDataSchema = v.object({
   en_explanation: v.string(),
   cn_explanation: v.optional(v.string()),
   phonetic: v.optional(v.string()),
+  synonym: v.optional(v.string()),
   mispronounced: v.boolean(),
   total_count: v.number(),
   correct_count: v.number(),
   type: v.union(v.literal('WORD'), v.literal('PHRASE')),
+});
+
+export const VUpdateWordDataSchema = v.object({
+  en_explanation: v.optional(v.string()),
+  cn_explanation: v.optional(v.string()),
+  phonetic: v.optional(v.string()),
+  synonym: v.optional(v.string()),
+  mispronounced: v.optional(v.boolean()),
+  total_count: v.optional(v.number()),
+  correct_count: v.optional(v.number()),
 });
 
 export type VWordItemType = Infer<typeof VWordDataSchema>;
@@ -30,7 +41,7 @@ const schema = defineSchema({
     code: VFuncCodeSchema,
   }).index('by_user_id', ['userId']),
   words: defineTable(VWordDataSchema).index('by_user_id', ['userId']),
-  explanations: defineTable({
+  examples: defineTable({
     wordId: v.id('words'),
     cn: v.string(),
     en: v.string(),

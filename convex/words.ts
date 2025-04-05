@@ -2,7 +2,7 @@ import { getAuthUserId } from '@convex-dev/auth/server';
 import { v } from 'convex/values';
 
 import { mutation, query } from './_generated/server';
-import { VWordDataSchema } from './schema';
+import { VUpdateWordDataSchema, VWordDataSchema } from './schema';
 
 export const getUserWords = query({
   args: {},
@@ -48,5 +48,40 @@ export const addWord = mutation({
       ...args,
     });
     return wordId;
+  },
+});
+
+export const updateWordById = mutation({
+  args: {
+    wordId: v.id('words'),
+    data: VUpdateWordDataSchema,
+  },
+  handler: async (ctx, { wordId, data }) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return null;
+    }
+    const word = await ctx.db.get(wordId);
+    if (word?.userId !== userId) {
+      return null;
+    }
+    await ctx.db.patch(wordId, data);
+  },
+});
+
+export const deleteWord = mutation({
+  args: {
+    wordId: v.id('words'),
+  },
+  handler: async (ctx, { wordId }) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return null;
+    }
+    const word = await ctx.db.get(wordId);
+    if (word?.userId !== userId) {
+      return null;
+    }
+    await ctx.db.delete(wordId);
   },
 });

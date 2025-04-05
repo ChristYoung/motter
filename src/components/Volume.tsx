@@ -1,5 +1,7 @@
 import { Loader, Volume2 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
+
+import { Button } from './ui/button';
 
 export interface VolumeProps {
   wordText: string;
@@ -9,7 +11,7 @@ export interface VolumeProps {
 
 export const AUDIO_SRC = 'https://dict.youdao.com/dictvoice?type=0&audio=';
 
-export const VolumeHorn: React.FC<VolumeProps> = (props: VolumeProps) => {
+export const VolumeHorn: React.FC<VolumeProps> = memo((props: VolumeProps) => {
   const { wordText, preloadSrc, autoPlay } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [audioSrc, setAudioSrc] = useState('');
@@ -49,10 +51,22 @@ export const VolumeHorn: React.FC<VolumeProps> = (props: VolumeProps) => {
         ></audio>
       )}
       {loading ? (
-        <Loader className='size-6 animate-spin text-foreground' />
+        <Button variant='ghost' size='icon' className='h-8 w-8 rounded-full'>
+          <Loader className='size-4 animate-spin text-foreground' />
+        </Button>
       ) : (
-        <Volume2 strokeWidth={1} className='cursor-pointer' onClick={playAudioManual} />
+        // <Volume2 strokeWidth={1} className='cursor-pointer' onClick={playAudioManual} />
+        <Button
+          variant='ghost'
+          size='icon'
+          className='h-8 w-8 rounded-full'
+          onClick={playAudioManual}
+        >
+          <Volume2 className='size-4' />
+        </Button>
       )}
     </div>
   );
-};
+});
+
+VolumeHorn.displayName = 'VolumeHorn';

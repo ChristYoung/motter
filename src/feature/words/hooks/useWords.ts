@@ -27,3 +27,25 @@ export const useGetWordByIdApi = (wordId: Id<'words'>) => {
   const isLoading = wordDetail === undefined;
   return { wordDetail, isLoading };
 };
+
+export const useDeleteWordApi = () => {
+  const mutation = useMutation(api.words.deleteWord);
+  const mutate = useCallback(
+    async (wordId: Id<'words'>) => {
+      await mutation({ wordId });
+    },
+    [mutation]
+  );
+  return { mutate };
+};
+
+export const useUpdateWordByIdApi = () => {
+  const mutation = useMutation(api.words.updateWordById);
+  const mutate = useCallback(
+    async (wordId: Id<'words'>, data: Partial<VWordItemType>) => {
+      await mutation({ wordId, data });
+    },
+    [mutation]
+  );
+  return { mutate };
+};
