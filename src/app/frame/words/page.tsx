@@ -1,6 +1,6 @@
 'use client';
 
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { formatDate } from 'date-fns';
 import { Binoculars } from 'lucide-react';
 
