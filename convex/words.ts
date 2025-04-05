@@ -1,4 +1,5 @@
 import { getAuthUserId } from '@convex-dev/auth/server';
+import { v } from 'convex/values';
 
 import { mutation, query } from './_generated/server';
 import { VWordDataSchema } from './schema';
@@ -15,6 +16,23 @@ export const getUserWords = query({
       .withIndex('by_user_id', (q) => q.eq('userId', userId))
       .collect();
     return words;
+  },
+});
+
+export const getWordById = query({
+  args: {
+    wordId: v.id('words'),
+  },
+  handler: async (ctx, { wordId }) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return null;
+    }
+    const word = await ctx.db.get(wordId);
+    if (word?.userId !== userId) {
+      return null;
+    }
+    return word;
   },
 });
 

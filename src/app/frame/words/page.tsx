@@ -1,10 +1,16 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
+import { formatDate } from 'date-fns';
+import { Binoculars } from 'lucide-react';
 
 import { ReusableTable } from '@/components/ReuseableTable';
+import { VolumeHorn } from '@/components/Volume';
+import { WordDetails } from '@/components/WordDetails';
+import { useSheet } from '@/context/SheetContextProvider';
 import { useGetWordsApi } from '@/feature/words/hooks/useWords';
 
+import { Id } from '../../../../convex/_generated/dataModel';
 import { VWordItemType } from '../../../../convex/schema';
 
 const columns: ColumnDef<VWordItemType>[] = [
@@ -15,23 +21,77 @@ const columns: ColumnDef<VWordItemType>[] = [
   {
     accessorKey: 'phonetic',
     header: 'Phonetic',
+    cell: ({ row }) => {
+      const phonetic = row.getValue('phonetic') as string;
+      return (
+        <div className='flex items-center gap-2'>
+          {phonetic}
+          <VolumeHorn
+            wordText={row.getValue('text') as string}
+            preloadSrc={false}
+            autoPlay={false}
+          />
+        </div>
+      );
+    },
   },
   {
     accessorKey: '_creationTime',
     header: 'Creation Time',
+    cell: ({ row }) => {
+      const creationTime = row.getValue('_creationTime') as string;
+      return formatDate(new Date(creationTime), 'yyyy/MM/dd HH:mm:ss');
+    },
   },
   {
-    accessorKey: '',
+    id: 'rightRate',
     header: 'Right Rate',
+    cell: ({ row }) => {
+      const { correct_count, total_count } = row.original;
+      const rightRate = ((correct_count / total_count || 0) * 100).toFixed(2);
+      return `${rightRate}%`;
+    },
+  },
+  {
+    accessorKey: '_id',
+    header: 'Action',
+    cell: ({ row }) => {
+      return (
+        <div className='flex items-center gap-2'>
+          <OpenWordDetail wordId={row.getValue('_id') as Id<'words'>} />
+        </div>
+      );
+    },
   },
 ];
 
+const OpenWordDetail = (props: { wordId: Id<'words'> }) => {
+  const { openSheet } = useSheet();
+  return (
+    <Binoculars
+      strokeWidth={1}
+      size={18}
+      onClick={() => {
+        console.log('props?.wordId', props?.wordId);
+        openSheet({
+          id: `word-detail_${props.wordId}`,
+          title: 'Word Detail',
+          content: <WordDetails wordId={props?.wordId} />,
+          width: 800,
+          style: { overflowY: 'auto' },
+        });
+      }}
+      className='cursor-pointer'
+    />
+  );
+};
+
 const WordsMng: React.FC = () => {
-  const { userWords, isLoading } = useGetWordsApi();
+  const { wordList, isLoading } = useGetWordsApi();
   return (
     <div className='h-full px-10'>
-      {!isLoading && userWords?.length > 0 && (
-        <ReusableTable columns={columns} data={userWords as VWordItemType[]}></ReusableTable>
+      {!isLoading && wordList?.length > 0 && (
+        <ReusableTable columns={columns} data={wordList as VWordItemType[]}></ReusableTable>
       )}
     </div>
   );
