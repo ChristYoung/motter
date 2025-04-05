@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+import { SynonymTags } from './SynonymTags';
+
 export interface WordDetailsProps {
   wordId: Id<'words'>;
 }
@@ -18,10 +20,6 @@ export const WordDetails: React.FC<WordDetailsProps> = (props: WordDetailsProps)
     'truth',
     'principle',
   ]);
-
-  const removeWord = (wordToRemove: string) => {
-    setSimilarWords(similarWords.filter((word) => word !== wordToRemove));
-  };
 
   return (
     <div className='w-full p-6'>
@@ -40,31 +38,7 @@ export const WordDetails: React.FC<WordDetailsProps> = (props: WordDetailsProps)
       <div className='mb-8'>
         <h2 className='text-2xl font-bold text-foreground mb-4'>Similar</h2>
         <div className='flex flex-wrap gap-2'>
-          {similarWords.map((word, index) => (
-            <div
-              key={index}
-              className={`
-                flex items-center gap-1 px-3 py-1.5 rounded-md border border-green-200 bg-green-50
-              `}
-            >
-              <span className='text-foreground dark:text-background'>{word}</span>
-              <Button
-                variant='ghost'
-                size='icon'
-                className='size-5 p-0'
-                onClick={() => removeWord(word)}
-              >
-                <X className='size-3 text-foreground dark:text-background' />
-              </Button>
-            </div>
-          ))}
-          <Button
-            variant='outline'
-            className='flex items-center gap-1 px-3 py-1.5 h-auto border-dashed'
-          >
-            <Plus className='h-3 w-3' />
-            <span>add new</span>
-          </Button>
+          <SynonymTags tags={similarWords} />
         </div>
       </div>
 
