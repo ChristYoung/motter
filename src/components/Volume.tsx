@@ -1,6 +1,8 @@
 import { Loader, Volume2 } from 'lucide-react';
 import { memo, useEffect, useRef, useState } from 'react';
 
+import { Button } from './ui/button';
+
 export interface VolumeProps {
   wordText: string;
   preloadSrc?: boolean;
@@ -49,9 +51,19 @@ export const VolumeHorn: React.FC<VolumeProps> = memo((props: VolumeProps) => {
         ></audio>
       )}
       {loading ? (
-        <Loader className='size-6 animate-spin text-foreground' />
+        <Button variant='ghost' size='icon' className='h-8 w-8 rounded-full'>
+          <Loader className='size-4 animate-spin text-foreground' />
+        </Button>
       ) : (
-        <Volume2 strokeWidth={1} className='cursor-pointer' onClick={playAudioManual} />
+        // <Volume2 strokeWidth={1} className='cursor-pointer' onClick={playAudioManual} />
+        <Button
+          variant='ghost'
+          size='icon'
+          className='h-8 w-8 rounded-full'
+          onClick={playAudioManual}
+        >
+          <Volume2 className='size-4' />
+        </Button>
       )}
     </div>
   );

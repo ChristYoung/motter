@@ -7,6 +7,7 @@ import { Binoculars, Trash2 } from 'lucide-react';
 import { ReusableTable } from '@/components/ReuseableTable';
 import { VolumeHorn } from '@/components/Volume';
 import { WordDetails } from '@/components/WordDetails';
+import { Button } from '@/components/ui/button';
 import { useSheet } from '@/context/SheetContextProvider';
 import { useDeleteWordApi, useGetWordsApi } from '@/feature/words/hooks/useWords';
 
@@ -70,26 +71,29 @@ const OpenWordDetail = (props: { wordId: Id<'words'> }) => {
   const { mutate: mutateDeleteWordById } = useDeleteWordApi();
   return (
     <div className='flex items-center gap-2'>
-      <Binoculars
-        strokeWidth={1}
-        size={14}
+      <Button
+        variant='ghost'
+        size='icon'
+        className='h-8 w-8 rounded-full'
         onClick={() => {
           openSheet({
             id: `word-detail_${props.wordId}`,
-            title: 'Word Detail',
             content: <WordDetails wordId={props?.wordId} />,
             width: 800,
             style: { overflowY: 'auto' },
           });
         }}
-        className='cursor-pointer'
-      />
-      <Trash2
-        strokeWidth={1.2}
-        size={14}
+      >
+        <Binoculars className='size-4' />
+      </Button>
+      <Button
+        variant='ghost'
+        size='icon'
+        className='h-8 w-8 rounded-full'
         onClick={() => mutateDeleteWordById(props.wordId)}
-        className='cursor-pointer'
-      />
+      >
+        <Trash2 className='size-4' />
+      </Button>
     </div>
   );
 };

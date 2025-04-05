@@ -16,8 +16,8 @@ import {
 export type SheetId = string;
 export type SheetProps = {
   id: SheetId;
-  title: string;
   content: ReactNode;
+  title?: string;
   width?: number;
   height?: number;
   style?: React.CSSProperties;
@@ -98,7 +98,7 @@ export const SheetContextProvider = ({ children }: { children: ReactNode }) => {
               style={{ width: `${sheetWidth}px`, ...sheetProps?.style }}
             >
               <SheetHeader>
-                <SheetTitle>{sheetProps.title}</SheetTitle>
+                {sheetProps?.title && <SheetTitle>{sheetProps.title}</SheetTitle>}
                 {sheetProps?.description && (
                   <SheetDescription>{sheetProps.description}</SheetDescription>
                 )}
