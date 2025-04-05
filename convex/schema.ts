@@ -41,7 +41,7 @@ const schema = defineSchema({
     code: VFuncCodeSchema,
   }).index('by_user_id', ['userId']),
   words: defineTable(VWordDataSchema).index('by_user_id', ['userId']),
-  explanations: defineTable({
+  examples: defineTable({
     wordId: v.id('words'),
     cn: v.string(),
     en: v.string(),
