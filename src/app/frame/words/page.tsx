@@ -1,14 +1,16 @@
 'use client';
 
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { formatDate } from 'date-fns';
 import { Binoculars } from 'lucide-react';
 
 import { ReusableTable } from '@/components/ReuseableTable';
 import { VolumeHorn } from '@/components/Volume';
+import { WordDetails } from '@/components/WordDetails';
 import { useSheet } from '@/context/SheetContextProvider';
 import { useGetWordsApi } from '@/feature/words/hooks/useWords';
 
+import { Id } from '../../../../convex/_generated/dataModel';
 import { VWordItemType } from '../../../../convex/schema';
 
 const columns: ColumnDef<VWordItemType>[] = [
@@ -42,39 +44,39 @@ const columns: ColumnDef<VWordItemType>[] = [
     },
   },
   {
-    accessorKey: '',
+    id: 'rightRate',
     header: 'Right Rate',
     cell: ({ row }) => {
-      const correctCount = row.getValue('correct_count') as number;
-      const totalCount = row.getValue('total_count') as number;
-      const rightRate = ((correctCount / totalCount || 0) * 100).toFixed(2);
+      const { correct_count, total_count } = row.original;
+      const rightRate = ((correct_count / total_count || 0) * 100).toFixed(2);
       return `${rightRate}%`;
     },
   },
   {
-    accessorKey: '',
+    accessorKey: '_id',
     header: 'Action',
     cell: ({ row }) => {
       return (
         <div className='flex items-center gap-2'>
-          <OpenWordDetail wordId={row.getValue('id') as string} />
+          <OpenWordDetail wordId={row.getValue('_id') as Id<'words'>} />
         </div>
       );
     },
   },
 ];
 
-const OpenWordDetail = (props: { wordId: string }) => {
+const OpenWordDetail = (props: { wordId: Id<'words'> }) => {
   const { openSheet } = useSheet();
   return (
     <Binoculars
       strokeWidth={1}
       size={18}
       onClick={() => {
+        console.log('props?.wordId', props?.wordId);
         openSheet({
           id: `word-detail_${props.wordId}`,
           title: 'Word Detail',
-          content: <div>Word Detail</div>,
+          content: <WordDetails wordId={props?.wordId} />,
           width: 800,
           style: { overflowY: 'auto' },
         });
@@ -85,11 +87,11 @@ const OpenWordDetail = (props: { wordId: string }) => {
 };
 
 const WordsMng: React.FC = () => {
-  const { userWords, isLoading } = useGetWordsApi();
+  const { wordList, isLoading } = useGetWordsApi();
   return (
     <div className='h-full px-10'>
-      {!isLoading && userWords?.length > 0 && (
-        <ReusableTable columns={columns} data={userWords as VWordItemType[]}></ReusableTable>
+      {!isLoading && wordList?.length > 0 && (
+        <ReusableTable columns={columns} data={wordList as VWordItemType[]}></ReusableTable>
       )}
     </div>
   );

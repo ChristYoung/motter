@@ -2,6 +2,7 @@ import { useMutation, useQuery } from 'convex/react';
 import { useCallback } from 'react';
 
 import { api } from '../../../../convex/_generated/api';
+import { Id } from '../../../../convex/_generated/dataModel';
 import { VWordItemType } from '../../../../convex/schema';
 
 export const useAddWordApi = () => {
@@ -16,7 +17,13 @@ export const useAddWordApi = () => {
 };
 
 export const useGetWordsApi = () => {
-  const userWords = useQuery(api.words.getUserWords);
-  const isLoading = userWords === undefined;
-  return { userWords, isLoading };
+  const wordList = useQuery(api.words.getUserWords);
+  const isLoading = wordList === undefined;
+  return { wordList, isLoading };
+};
+
+export const useGetWordByIdApi = (wordId: Id<'words'>) => {
+  const wordDetail = useQuery(api.words.getWordById, { wordId });
+  const isLoading = wordDetail === undefined;
+  return { wordDetail, isLoading };
 };
