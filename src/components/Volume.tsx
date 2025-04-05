@@ -1,5 +1,5 @@
 import { Loader, Volume2 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 
 export interface VolumeProps {
   wordText: string;
@@ -9,7 +9,7 @@ export interface VolumeProps {
 
 export const AUDIO_SRC = 'https://dict.youdao.com/dictvoice?type=0&audio=';
 
-export const VolumeHorn: React.FC<VolumeProps> = (props: VolumeProps) => {
+export const VolumeHorn: React.FC<VolumeProps> = memo((props: VolumeProps) => {
   const { wordText, preloadSrc, autoPlay } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [audioSrc, setAudioSrc] = useState('');
@@ -55,4 +55,6 @@ export const VolumeHorn: React.FC<VolumeProps> = (props: VolumeProps) => {
       )}
     </div>
   );
-};
+});
+
+VolumeHorn.displayName = 'VolumeHorn';
